@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ import java.util.Map;
 public class InMemoryItemDao implements ItemDao {
 
     private final HashMap<Integer, Item> itemMap = new HashMap<>();
-    int generatedId = 0;
+    private int generatedId = 0;
 
     @Override
     public Item addItem(Item item) {
@@ -65,13 +66,10 @@ public class InMemoryItemDao implements ItemDao {
 
     @Override
     public List<Item> getItems(int userId, User owner) {
-        List<Item> itemList = new ArrayList<>();
-        for (Map.Entry<Integer, Item> entry : itemMap.entrySet()) {
-            if (entry.getValue().getOwner().equals(owner)) {
-                itemList.add(entry.getValue());
-            }
-        }
-        return itemList;
+
+        return itemMap.values().stream()
+                .filter(item -> item.getOwner().equals(owner))
+                .collect(Collectors.toList());
     }
 
     @Override

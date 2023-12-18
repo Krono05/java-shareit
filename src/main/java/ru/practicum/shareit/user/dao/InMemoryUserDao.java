@@ -11,7 +11,8 @@ import ru.practicum.shareit.user.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ import java.util.Map;
 public class InMemoryUserDao implements UserDao {
 
     private final HashMap<Integer, User> userMap = new HashMap<>();
-    int generatedId = 0;
+    private int generatedId = 0;
 
     @Override
     public User createUser(User user) {
@@ -66,11 +67,7 @@ public class InMemoryUserDao implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<>();
-        for (Map.Entry<Integer, User> entry : userMap.entrySet()) {
-            userList.add(entry.getValue());
-        }
-        return userList;
+        return new ArrayList<>(userMap.values());
     }
 
     @Override
@@ -89,11 +86,14 @@ public class InMemoryUserDao implements UserDao {
     }
 
     private void checkEmail(User user) {
-        for (Map.Entry<Integer, User> entry : userMap.entrySet()) {
-            if (entry.getValue().getEmail().equals(user.getEmail())) {
-                log.warn("Email: " + user.getEmail() + " уже используется другим пользователем");
-                throw new ValidationException("Пользователь с таким email уже зарегистрирован!");
-            }
+        Set<String> emailSet = userMap.values()
+                .stream()
+                .map(User::getEmail)
+                .collect(Collectors.toSet());
+
+        if (emailSet.contains(user.getEmail())) {
+            log.warn("Email: " + user.getEmail() + " уже используется другим пользователем");
+            throw new ValidationException("Пользователь с таким email уже зарегистрирован!");
         }
     }
 }
