@@ -21,6 +21,7 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(exception.getMessage()));
     }
+
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> itemNotFoundException(ItemNotFoundException exception) {
         log.debug(exception.getMessage());
@@ -52,6 +53,7 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(exception.getMessage()));
     }
+
     @ExceptionHandler(BookingException.class)
     public ResponseEntity<ErrorResponse> bookingException(BookingException exception) {
         log.debug(exception.getMessage());
@@ -83,6 +85,7 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(exception.getMessage()));
     }
+
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorResponse> runtimeException(RuntimeException exception) {
         log.debug(exception.getMessage());
