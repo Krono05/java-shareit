@@ -21,12 +21,27 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(exception.getMessage()));
     }
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<ErrorResponse> itemNotFoundException(ItemNotFoundException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> bookingNotFoundException(BookingNotFoundException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
 
     @ExceptionHandler(NotOwnerException.class)
     public ResponseEntity<ErrorResponse> notOwnerException(NotOwnerException exception) {
         log.debug(exception.getMessage());
         return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
+                .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(exception.getMessage()));
     }
 
@@ -37,7 +52,37 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(exception.getMessage()));
     }
+    @ExceptionHandler(BookingException.class)
+    public ResponseEntity<ErrorResponse> bookingException(BookingException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
 
+    @ExceptionHandler(NotAvailableException.class)
+    public ResponseEntity<ErrorResponse> notAvailableException(NotAvailableException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(DateException.class)
+    public ResponseEntity<ErrorResponse> dateException(DateException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyApprovedException.class)
+    public ResponseEntity<ErrorResponse> alreadyApprovedException(AlreadyApprovedException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorResponse> runtimeException(RuntimeException exception) {
         log.debug(exception.getMessage());
