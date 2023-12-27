@@ -11,6 +11,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,8 @@ import java.util.stream.Collectors;
 @Primary
 public class InMemoryUserDao implements UserDao {
 
-    private final HashMap<Integer, User> userMap = new HashMap<>();
-    private int generatedId = 0;
+    private final HashMap<Long, User> userMap = new HashMap<>();
+    private Long generatedId = 0L;
 
     @Override
     public User createUser(User user) {
@@ -33,7 +34,7 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(Long userId) {
         if (userMap.containsKey(userId)) {
             return userMap.get(userId);
         } else {
@@ -43,7 +44,7 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public User updateUser(int userId, User user) {
+    public User updateUser(Long userId, User user) {
         if (userMap.containsKey(userId)) {
             User mainUser = userMap.get(userId);
 
@@ -71,7 +72,7 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(Long userId) {
         if (userMap.containsKey(userId)) {
             userMap.remove(userId);
             log.info("Удален пользователь с ID: " + userId);
@@ -81,7 +82,7 @@ public class InMemoryUserDao implements UserDao {
         }
     }
 
-    private int generateId() {
+    private Long generateId() {
         return ++generatedId;
     }
 

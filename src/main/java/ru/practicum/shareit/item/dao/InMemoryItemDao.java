@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 @Primary
 public class InMemoryItemDao implements ItemDao {
 
-    private final HashMap<Integer, Item> itemMap = new HashMap<>();
-    private int generatedId = 0;
+    private final HashMap<Long, Item> itemMap = new HashMap<>();
+    private Long generatedId = 0L;
 
     @Override
     public Item addItem(Item item) {
@@ -32,7 +32,7 @@ public class InMemoryItemDao implements ItemDao {
     }
 
     @Override
-    public Item editItem(int itemId, Item item) {
+    public Item editItem(Long itemId, Item item) {
         if (itemMap.containsKey(itemId)) {
             Item mainItem = itemMap.get(itemId);
 
@@ -55,7 +55,7 @@ public class InMemoryItemDao implements ItemDao {
     }
 
     @Override
-    public Item getItemById(int itemId) {
+    public Item getItemById(Long itemId) {
         if (itemMap.containsKey(itemId)) {
             return itemMap.get(itemId);
         } else {
@@ -65,7 +65,7 @@ public class InMemoryItemDao implements ItemDao {
     }
 
     @Override
-    public List<Item> getItems(int userId, User owner) {
+    public List<Item> getItems(Long userId, User owner) {
 
         return itemMap.values().stream()
                 .filter(item -> item.getOwner().equals(owner))
@@ -75,7 +75,7 @@ public class InMemoryItemDao implements ItemDao {
     @Override
     public List<Item> searchItems(String text) {
         List<Item> itemsFound = new ArrayList<>();
-        for (Map.Entry<Integer, Item> entry : itemMap.entrySet()) {
+        for (Map.Entry<Long, Item> entry : itemMap.entrySet()) {
             Item item = entry.getValue();
             if (item.getName().toLowerCase().contains(text.toLowerCase()) ||
                     item.getDescription().toLowerCase().contains(text.toLowerCase()) && item.getAvailable()) {
@@ -85,7 +85,7 @@ public class InMemoryItemDao implements ItemDao {
         return itemsFound;
     }
 
-    private int generateId() {
+    private Long generateId() {
         return ++generatedId;
     }
 }

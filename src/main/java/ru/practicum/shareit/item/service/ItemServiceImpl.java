@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.service;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,14 +10,15 @@ import ru.practicum.shareit.exception.BookingException;
 import ru.practicum.shareit.exception.NotOwnerException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -31,15 +31,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
     @Override
     @Transactional
-    public ItemDto addItem(int userId, ItemDto itemDto) {
+    public ItemDto addItem(Long userId, ItemDto itemDto) {
         Item item = ItemMapper.dtoToItem(itemDto);
-        item.setOwner(userRepository.getExistingUser(userId));
+        item.setOwner(UserMapper.dtoToUser(userService.getUserById(userId)));
         Item newItem = itemRepository.save(item);
         log.info("Добавлен предмет с ID: {} - {}", newItem.getId(), newItem);
         return ItemMapper.itemToDto(newItem);
@@ -47,11 +47,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto editItem(int userId, int itemId, ItemDto itemDto) {
+    public ItemDto editItem(Long userId, Long itemId, ItemDto itemDto) {
         Item mainItem = itemRepository.getExistingItem(itemId);
         Item itemDataToUpdate = ItemMapper.dtoToItem(itemDto);
-
-        if (!mainItem.getOwner().equals(userRepository.getExistingUser(userId))) {
+        if (!mainItem.getOwner().equals(UserMapper.dtoToUser(userService.getUserById(userId)))) {
             log.warn("Пользователь с ID: " + userId + " не является владельцом вещи: " + mainItem);
             throw new NotOwnerException("Редактировать вещь может только её владелец!");
         }
@@ -70,11 +69,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItemById(int itemId, int userId) {
+    public ItemDto getItemById(Long itemId, Long userId) {
         Item item = itemRepository.getExistingItem(itemId);
         ItemDto itemDto = ItemMapper.itemToDto(item);
 
-        if (userId == item.getOwner().getId()) {
+        if (userId.equals(item.getOwner().getId())) {
             findLastAndNextBookings(itemDto);
         }
 
@@ -83,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getItems(int userId) {
+    public List<ItemDto> getItems(Long userId) {
         List<ItemDto> items = itemRepository.findByOwnerId(userId)
                 .stream()
                 .map(ItemMapper::itemToDto)
@@ -105,9 +104,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public CommentDto addComment(int userId, int itemId, CommentDto commentDto) {
+    public CommentDto addComment(Long userId, Long itemId, CommentDto commentDto) {
         Item item = itemRepository.getExistingItem(itemId);
-        User booker = userRepository.getExistingUser(userId);
+        User booker = UserMapper.dtoToUser(userService.getUserById(userId));
         List<Booking> bookings = bookingRepository.findByBookerAndItemIdAndEndBeforeAndStatus(booker, itemId,
                 LocalDateTime.now(), BookingStatus.APPROVED);
 
