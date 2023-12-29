@@ -42,7 +42,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "SELECT * FROM bookings b " +
             "LEFT JOIN items i on b.item_id = i.item_id " +
             "WHERE i.owner_id = :ownerId " +
-            "AND :currentTime BETWEEN start_date AND end_date",
+            "AND :currentTime BETWEEN b.start_date AND b.end_date",
             nativeQuery = true)
     List<Booking> findByOwnerIdAndCurrentTime(Long ownerId, LocalDateTime currentTime);
 
