@@ -47,13 +47,13 @@ class BookingControllerMvcTest {
     @BeforeEach
     void beforeEach() {
         bookingDtoRequest = new BookingDtoRequest(1L,
-                LocalDateTime.of(2023, 5, 25, 15, 0),
-                LocalDateTime.of(2023, 5, 26, 15, 0),
+                LocalDateTime.of(2024, 1, 25, 15, 0),
+                LocalDateTime.of(2024, 1, 25, 15, 0),
                 1L);
 
         bookingDtoResponse = new BookingDtoResponse(1L,
-                LocalDateTime.of(2023, 5, 25, 15, 0),
-                LocalDateTime.of(2023, 5, 26, 15, 0),
+                LocalDateTime.of(2024, 1, 25, 15, 0),
+                LocalDateTime.of(2024, 1, 26, 15, 0),
                 new BookingDtoResponse.Item(1L, "itemName"),
                 new BookingDtoResponse.User(1L, "name"),
                 null);
