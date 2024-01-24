@@ -101,5 +101,12 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(Objects.requireNonNull(exception.getFieldError()).getDefaultMessage()));
     }
+    @ExceptionHandler(RequestNotFoundException.class)
+    public ResponseEntity<ErrorResponse> requestNotFoundException(RequestNotFoundException exception) {
+        log.debug(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
 }
 
