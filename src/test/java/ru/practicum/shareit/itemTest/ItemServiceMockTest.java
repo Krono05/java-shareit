@@ -85,7 +85,7 @@ class ItemServiceMockTest {
     @Test
     void shouldSaveItemWhenValidWhileAddItem() {
         when(userService.getUserById(user.getId())).thenReturn(userDto);
-        when(itemRepository.save(item)).thenReturn(item);
+        when(itemRepository.save(any(Item.class))).thenReturn(item);
 
         ItemDto addedItem = itemService.addItem(user.getId(), itemDto);
 
