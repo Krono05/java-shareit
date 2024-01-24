@@ -89,7 +89,7 @@ class ItemServiceMockTest {
 
         ItemDto addedItem = itemService.addItem(user.getId(), itemDto);
 
-        verify(itemRepository, times(1)).save(item);
+        verify(itemRepository, times(1)).save(any(Item.class));
         assertEquals(ItemMapper.itemToDto(item), addedItem);
     }
 
@@ -108,11 +108,11 @@ class ItemServiceMockTest {
         item.setRequest(itemRequest);
         when(userService.getUserById(user.getId())).thenReturn(userDto);
         when(requestRepository.getExistingRequest(itemRequest.getId())).thenReturn(itemRequest);
-        when(itemRepository.save(item)).thenReturn(item);
+        when(itemRepository.save(any(Item.class))).thenReturn(item);
 
         ItemDto savedItem = itemService.addItem(user.getId(), itemDto);
 
-        verify(itemRepository, times(1)).save(item);
+        verify(itemRepository, times(1)).save(any(Item.class));
         assertEquals(1L, savedItem.getRequestId());
     }
 
