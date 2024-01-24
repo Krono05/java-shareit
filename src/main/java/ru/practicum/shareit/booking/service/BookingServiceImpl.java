@@ -2,21 +2,26 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
-import ru.practicum.shareit.exception.*;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingSort;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.AlreadyApprovedException;
+import ru.practicum.shareit.exception.BookingNotFoundException;
+import ru.practicum.shareit.exception.DateException;
+import ru.practicum.shareit.exception.NotAvailableException;
+import ru.practicum.shareit.exception.NotOwnerException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import ru.practicum.shareit.booking.model.BookingSort;
+
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -154,6 +159,7 @@ public class BookingServiceImpl implements BookingService {
             throw new DateException("Дата начала и дата окончания бронирования совпадают");
         }
     }
+
     private PageRequest createPageRequest(int from, int size, BookingSort sort) {
         return PageRequest.of(from / size, size, sort.getSortValue());
     }
