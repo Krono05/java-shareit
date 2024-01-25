@@ -2,7 +2,10 @@ package ru.practicum.shareit.request.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -12,7 +15,8 @@ import java.time.LocalDateTime;
  * TODO Sprint add-item-requests.
  */
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -27,7 +31,7 @@ public class ItemRequest {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requestor_id")
     private User requestor;
 

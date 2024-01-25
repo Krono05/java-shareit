@@ -31,7 +31,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRepository itemRepository;
 
     @Override
-    @Transactional
     public ItemRequestDto addRequest(Long userId, ItemRequestDto itemRequestDto) {
         ItemRequest request = ItemRequestMapper.dtoToRequest(itemRequestDto);
         request.setRequestor(userRepository.getExistingUser(userId));
