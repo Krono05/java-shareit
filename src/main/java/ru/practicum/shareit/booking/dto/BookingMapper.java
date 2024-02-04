@@ -39,7 +39,7 @@ public class BookingMapper {
         );
     }
 
-    public static List<BookingDtoResponse> bookingDtoResponseListSorted(List<Booking> bookingList) {
+    public static List<BookingDtoResponse> bookingDtoResponseList(List<Booking> bookingList) {
         return bookingList.stream()
                 .sorted(Comparator.comparing(Booking::getStart).reversed())
                 .map(BookingMapper::bookingToDtoResponse)
