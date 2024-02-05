@@ -22,9 +22,11 @@ services:
       - postgres
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=iamroot
+      - POSTGRES_DB=${POSTGRES_DB:postgres}
+      - POSTGRES_USER=${POSTGRES_USER:postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:iamroot}
+    env_file:
+      - .env
 
   postgres:
     image: postgres:13.7-alpine
@@ -34,9 +36,11 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=iamroot
+      - POSTGRES_DB=${POSTGRES_DB:postgres}
+      - POSTGRES_USER=${POSTGRES_USER:postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:iamroot}
+    env_file:
+      - .env
 
   pgadmin:
     image: dpage/pgadmin4
