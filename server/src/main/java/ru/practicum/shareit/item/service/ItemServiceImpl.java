@@ -12,13 +12,13 @@ import ru.practicum.shareit.exception.BookingException;
 import ru.practicum.shareit.exception.NotOwnerException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemSort;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -45,9 +45,11 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto addItem(Long userId, ItemDto itemDto) {
         Item item = ItemMapper.dtoToItem(itemDto);
         item.setOwner(UserMapper.dtoToUser(userService.getUserById(userId)));
+
         if (itemDto.getRequestId() != null) {
             item.setRequest(requestRepository.getExistingRequest(itemDto.getRequestId()));
         }
+
         Item newItem = itemRepository.save(item);
         log.info("Добавлен предмет с ID: {} - {}", newItem.getId(), newItem);
         return ItemMapper.itemToDto(newItem);
@@ -139,7 +141,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Transactional
-    void findLastAndNextBookings(ItemDto itemDto) {
+    private void findLastAndNextBookings(ItemDto itemDto) {
         Booking lastBooking = bookingRepository.findFirstByItemIdAndStartBeforeAndStatusOrderByStartDesc(itemDto.getId(),
                 LocalDateTime.now(), BookingStatus.APPROVED);
         if (lastBooking != null) {
@@ -161,6 +163,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private PageRequest createPageRequest(int from, int size, ItemSort sort) {
-        return PageRequest.of(from / size, size);
+        return PageRequest.of(from / size, size, sort.getSortValue());
     }
 }
