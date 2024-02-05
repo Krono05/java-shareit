@@ -8,11 +8,9 @@ services:
       - "8080:8080"
     depends_on:
       - server
-      - postgres
+      - db
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
-    env_file:
-      - .env
 
   server:
     build: server
@@ -21,16 +19,14 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - postgres
+      - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-      - POSTGRES_DB={POSTGRES_DB:postgres}
-      - POSTGRES_USER={POSTGRES_USER:postgres}
-      - POSTGRES_PASSWORD={POSTGRES_PASSWORD:iamroot}
-    env_file:
-      - .env
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=iamroot
 
-  postgres:
+  db:
     image: postgres:13.7-alpine
     container_name: db
     volumes:
@@ -38,11 +34,9 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB={POSTGRES_DB:postgres}
-      - POSTGRES_USER={POSTGRES_USER:postgres}
-      - POSTGRES_PASSWORD={POSTGRES_PASSWORD:iamroot}
-    env_file:
-      - .env
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=iamroot
 
   pgadmin:
     image: dpage/pgadmin4
