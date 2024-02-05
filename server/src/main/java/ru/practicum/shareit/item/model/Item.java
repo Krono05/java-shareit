@@ -31,7 +31,7 @@ public class Item {
     @Column(name = "is_available")
     private Boolean available;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 
