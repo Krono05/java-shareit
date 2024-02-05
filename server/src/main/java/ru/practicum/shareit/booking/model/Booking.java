@@ -1,17 +1,19 @@
 package ru.practicum.shareit.booking.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
+/**
+ * TODO Sprint add-bookings.
+ */
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

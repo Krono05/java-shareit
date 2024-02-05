@@ -5,9 +5,11 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * TODO Sprint add-bookings.
+ */
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDtoResponse {
