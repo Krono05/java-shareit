@@ -1,2 +1,2 @@
-# java-shareit
+git # java-shareit
 Template repository for Shareit project.
