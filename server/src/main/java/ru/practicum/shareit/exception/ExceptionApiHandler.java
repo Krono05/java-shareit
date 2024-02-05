@@ -53,14 +53,6 @@ public class ExceptionApiHandler {
                 .body(new ErrorResponse(exception.getMessage()));
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse> validationException(ValidationException exception) {
-        log.debug(exception.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(exception.getMessage()));
-    }
-
     @ExceptionHandler(BookingException.class)
     public ResponseEntity<ErrorResponse> bookingException(BookingException exception) {
         log.debug(exception.getMessage());
